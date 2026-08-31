@@ -226,6 +226,9 @@ export default function HomePage() {
 
       <CarePathways />
       <WhyChooseus/>
+
+
+      
       <Footer />
 
       {/* FLOATING ACTION BUTTONS */}
