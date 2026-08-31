@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { 
   Phone, MessageCircle, Menu, X, ArrowRight, ShieldCheck, 
   Activity, MapPin, Star, Users, Zap, CheckCircle2 
@@ -12,8 +13,6 @@ import CarePathways from './CarePathways';
 import WhyChooseus from './WhyChooseus';
 import Footer from './Footer';
 
-
-
 // Register GSAP Plugin
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -22,12 +21,22 @@ if (typeof window !== "undefined") {
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
   
   // Refs for animations
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
   const aboutRef = useRef(null);
   const techRef = useRef(null);
+
+  // Navigation Items
+  const navItems = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Treatments', href: '/treatments' },
+    { name: 'Technology', href: '/technology' },
+    { name: 'Contact Us', href: '/contact' }
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,20 +55,6 @@ export default function HomePage() {
         ease: "power3.out"
       });
 
-      // // Services Horizontal Scroll Trigger
-      // gsap.to(".services-track", {
-      //   x: () => -(document.querySelector('.services-track').scrollWidth - window.innerWidth + 100),
-      //   ease: "none",
-      //   scrollTrigger: {
-      //     trigger: ".services-section",
-      //     start: "top top",
-      //     end: () => "+=" + document.querySelector('.services-track').scrollWidth,
-      //     scrub: 1,
-      //     pin: true,
-      //     anticipatePin: 1
-      //   }
-      // });
-
       // About Section Fade In
       gsap.from(".about-card", {
         scrollTrigger: {
@@ -71,7 +66,6 @@ export default function HomePage() {
         duration: 1,
         stagger: 0.2
       });
-
     }, heroRef);
 
     return () => {
@@ -93,7 +87,7 @@ export default function HomePage() {
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
           
-          <div className="flex items-center gap-4 group cursor-pointer">
+          <Link href="/" className="flex items-center gap-4 group cursor-pointer">
             <div className="w-12 h-12 flex items-center justify-center bg-[#0a1e3f] text-white rounded-xl shadow-md transition-transform group-hover:scale-105">
               <Activity size={24} className="text-[#c5973e]" />
             </div>
@@ -109,25 +103,28 @@ export default function HomePage() {
                Spine & Joint Rehab LLP
               </span>
             </div>
-          </div>
+          </Link>
 
           <div className="hidden lg:flex items-center space-x-10">
-            {['Home', 'About', 'Treatments', 'Technology', 'Contact'].map((item, index) => (
-              <Link 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                className={`text-sm font-bold tracking-wide transition-colors relative py-2 group ${
-                  isScrolled 
-                    ? (index === 0 ? "text-[#0071bd]" : "text-slate-600 hover:text-[#0a1e3f]")
-                    : "text-white hover:text-[#c5973e]"
-                }`}
-              >
-                {item}
-                <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 ${
-                  isScrolled ? "bg-[#c5973e]" : "bg-white"
-                } w-0 group-hover:w-full`}></span>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link 
+                  key={item.name} 
+                  href={item.href} 
+                  className={`text-sm font-bold tracking-wide transition-colors relative py-2 group ${
+                    isScrolled 
+                      ? (isActive ? "text-[#0071bd]" : "text-slate-600 hover:text-[#0a1e3f]")
+                      : (isActive ? "text-[#c5973e]" : "text-white hover:text-[#c5973e]")
+                  }`}
+                >
+                  {item.name}
+                  <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 ${
+                    isScrolled ? "bg-[#c5973e]" : "bg-white"
+                  } ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}></span>
+                </Link>
+              );
+            })}
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
@@ -152,16 +149,21 @@ export default function HomePage() {
         {/* Mobile Menu */}
         <div className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-slate-100 transition-all duration-300 overflow-hidden ${mobileMenuOpen ? "max-h-96 py-4" : "max-h-0 py-0"}`}>
           <div className="flex flex-col px-6 space-y-4">
-            {['Home', 'About', 'Treatments', 'Technology', 'Contact'].map((item) => (
-              <Link 
-                key={item} 
-                href={`#${item.toLowerCase()}`}
-                className="text-[#0a1e3f] font-semibold text-lg border-b border-slate-100 pb-3 hover:text-[#0071bd]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link 
+                  key={item.name} 
+                  href={item.href}
+                  className={`font-semibold text-lg border-b border-slate-100 pb-3 transition-colors ${
+                    isActive ? "text-[#0071bd]" : "text-[#0a1e3f] hover:text-[#0071bd]"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </nav>
@@ -222,52 +224,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <CarePathways />
+      <WhyChooseus/>
+      <Footer />
 
-
-<CarePathways />
-<WhyChooseus/>
- 
-
-
-
-
-
-
-
-
-      
-      {/* <section className="services-section relative h-screen bg-[#0a1e3f] overflow-hidden flex items-center">
-        <div className="absolute top-10 left-10 z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">Our Specializations</h2>
-          <div className="h-1 w-20 bg-[#c5973e]"></div>
-        </div>
-        
-        <div className="services-track flex gap-8 px-10 pl-[20vw] items-center h-full w-max">
-          {[
-            { title: "Spine Care", desc: "Advanced treatment for disc herniation, sciatica, and chronic back pain.", img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80" },
-            { title: "Joint Replacement Rehab", desc: "Post-surgical recovery protocols for knee, hip, and shoulder joints.", img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" },
-            { title: "Neuro Rehabilitation", desc: "Specialized care for stroke, Parkinson's, and nerve injuries.", img: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=800&q=80" },
-            { title: "Sports Injury", desc: "Get back in the game with our athlete-focused recovery programs.", img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80" },
-            { title: "Geriatric Care", desc: "Gentle yet effective therapy to improve mobility and quality of life.", img: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80" }
-          ].map((service, i) => (
-            <div key={i} className="relative w-[400px] h-[500px] rounded-2xl overflow-hidden group shrink-0 border border-white/10">
-              <img src={service.img} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1e3f] via-[#0a1e3f]/50 to-transparent opacity-90"></div>
-              <div className="absolute bottom-0 left-0 p-8">
-                <h3 className="text-2xl font-bold text-white mb-2">{service.title}</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">{service.desc}</p>
-                <button className="mt-4 text-[#c5973e] font-bold flex items-center gap-2 group/btn">
-                  Learn More <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-2" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
-
-
-
-<Footer />
       {/* FLOATING ACTION BUTTONS */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
         <a 
