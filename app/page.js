@@ -5,13 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   Phone, MessageCircle, Menu, X, ArrowRight, ShieldCheck, 
-  Activity, MapPin, Star, Users, Zap, CheckCircle2 
+  Activity, MapPin, Star, Users, Zap, CheckCircle2, ChevronDown
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CarePathways from './CarePathways';
 import WhyChooseus from './WhyChooseus';
 import Footer from './Footer';
+import ConditionDropdown from './ConditionDropdown'; // New Import
 
 // Register GSAP Plugin
 if (typeof window !== "undefined") {
@@ -21,20 +22,18 @@ if (typeof window !== "undefined") {
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
   const pathname = usePathname();
   
   // Refs for animations
   const heroRef = useRef(null);
-  const servicesRef = useRef(null);
-  const aboutRef = useRef(null);
-  const techRef = useRef(null);
-
+  
   // Navigation Items
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Treatments', href: '/treatments' },
-    { name: 'Technology', href: '/technology' },
+    { name: 'Services', href: '/services' },
+    // Note: Conditions is now handled separately with dropdown
     { name: 'Contact Us', href: '/contact' }
   ];
 
@@ -53,18 +52,6 @@ export default function HomePage() {
         duration: 1,
         stagger: 0.2,
         ease: "power3.out"
-      });
-
-      // About Section Fade In
-      gsap.from(".about-card", {
-        scrollTrigger: {
-          trigger: ".about-section",
-          start: "top 80%",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2
       });
     }, heroRef);
 
@@ -105,7 +92,8 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <div className="hidden lg:flex items-center space-x-10">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -125,6 +113,28 @@ export default function HomePage() {
                 </Link>
               );
             })}
+
+            {/* CONDITIONS DROPDOWN TRIGGER */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              <button 
+                className={`flex items-center gap-1 text-sm font-bold tracking-wide transition-colors relative py-2 group ${
+                  isScrolled 
+                    ? "text-slate-600 hover:text-[#0a1e3f]"
+                    : "text-white hover:text-[#c5973e]"
+                }`}
+              >
+                Conditions We Treat
+                <ChevronDown size={16} className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
+                <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 bg-[#c5973e] w-0 group-hover:w-full`}></span>
+              </button>
+
+              {/* THE DROPDOWN COMPONENT */}
+              {dropdownOpen && <ConditionDropdown />}
+            </div>
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
@@ -164,6 +174,14 @@ export default function HomePage() {
                 </Link>
               );
             })}
+            {/* Mobile Conditions Link (Simple link for mobile) */}
+             <Link 
+                href="/conditions"
+                className="font-semibold text-lg border-b border-slate-100 pb-3 text-[#0a1e3f] hover:text-[#0071bd]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Conditions We Treat
+              </Link>
           </div>
         </div>
       </nav>
@@ -226,9 +244,6 @@ export default function HomePage() {
 
       <CarePathways />
       <WhyChooseus/>
-
-
-      
       <Footer />
 
       {/* FLOATING ACTION BUTTONS */}
