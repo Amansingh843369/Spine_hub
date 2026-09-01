@@ -12,7 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CarePathways from './CarePathways';
 import WhyChooseus from './WhyChooseus';
 import Footer from './Footer';
-import ConditionDropdown from './ConditionDropdown'; // New Import
+import ConditionDropdown from './ConditionDropdown'; 
 
 // Register GSAP Plugin
 if (typeof window !== "undefined") {
@@ -22,18 +22,19 @@ if (typeof window !== "undefined") {
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
   const pathname = usePathname();
   
-  // Refs for animations
+  // Refs for animations and click outside detection
   const heroRef = useRef(null);
-  
+  const dropdownRef = useRef(null); // Ref for the dropdown trigger area
+
   // Navigation Items
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
-    // Note: Conditions is now handled separately with dropdown
+    { name: 'Blog', href: '/blog' },
     { name: 'Contact Us', href: '/contact' }
   ];
 
@@ -45,7 +46,6 @@ export default function HomePage() {
 
     // GSAP Animations
     const ctx = gsap.context(() => {
-      // Hero Animation
       gsap.from(".hero-content > *", {
         y: 50,
         opacity: 0,
@@ -55,8 +55,18 @@ export default function HomePage() {
       });
     }, heroRef);
 
+    // Click Outside Handler to close dropdown
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
       ctx.revert();
     };
   }, []);
@@ -114,26 +124,31 @@ export default function HomePage() {
               );
             })}
 
-            {/* CONDITIONS DROPDOWN TRIGGER */}
+            {/* CONDITIONS DROPDOWN TRIGGER - CLICK BASED */}
             <div 
+              ref={dropdownRef}
               className="relative"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
             >
               <button 
+                onClick={() => setDropdownOpen(!dropdownOpen)}
                 className={`flex items-center gap-1 text-sm font-bold tracking-wide transition-colors relative py-2 group ${
                   isScrolled 
-                    ? "text-slate-600 hover:text-[#0a1e3f]"
-                    : "text-white hover:text-[#c5973e]"
+                    ? (dropdownOpen ? "text-[#0071bd]" : "text-slate-600 hover:text-[#0a1e3f]")
+                    : (dropdownOpen ? "text-[#c5973e]" : "text-white hover:text-[#c5973e]")
                 }`}
               >
                 Conditions We Treat
                 <ChevronDown size={16} className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
-                <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 bg-[#c5973e] w-0 group-hover:w-full`}></span>
+                <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 bg-[#c5973e] ${dropdownOpen ? "w-full" : "w-0 group-hover:w-full"}`}></span>
               </button>
 
-              {/* THE DROPDOWN COMPONENT */}
-              {dropdownOpen && <ConditionDropdown />}
+              {/* THE DROPDOWN COMPONENT - Only shows if dropdownOpen is true */}
+              {dropdownOpen && (
+                <div className="absolute top-full left-0 pt-4 w-max"> 
+                   {/* pt-4 adds a little gap so mouse doesn't lose focus immediately if we wanted hover, but for click it's just spacing */}
+                   <ConditionDropdown />
+                </div>
+              )}
             </div>
           </div>
 
@@ -174,7 +189,6 @@ export default function HomePage() {
                 </Link>
               );
             })}
-            {/* Mobile Conditions Link (Simple link for mobile) */}
              <Link 
                 href="/conditions"
                 className="font-semibold text-lg border-b border-slate-100 pb-3 text-[#0a1e3f] hover:text-[#0071bd]"

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { 
   AlertTriangle, CheckCircle2, Activity, ArrowRight, 
   Target, Phone, MessageCircle, ShieldCheck, Clock,
-  MapPin, Star
+  MapPin, Star, BrainCircuit, Bone, Move, HeartPulse
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,51 +15,95 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// --- DATA CONFIGURATION ---
+// --- COMPREHENSIVE DATA CONFIGURATION ---
 const conditionData = {
+  // SPINE & NERVE
   "lower-back-pain": {
     title: "Lower Back Pain",
     subtitle: "Restore Mobility & Eliminate Chronic Discomfort",
     category: "Spine Health",
     heroImage: "https://images.unsplash.com/photo-1544367563-12123d8965cd?auto=format&fit=crop&w=1920&q=80",
-    stats: [
-      { label: "Success Rate", value: "94%" },
-      { label: "Avg Recovery", value: "6 Weeks" },
-      { label: "Patients Treated", value: "2000+" }
-    ],
     description: "Lower back pain is more than just an ache; it’s a disruption to your life. At Aditya Spine & Joint Rehab, we don't just treat the symptom—we decode the biomechanical failure causing your pain.",
-    symptoms: [
-      "Persistent dull ache in lumbar region",
-      "Sharp stabbing pain during movement",
-      "Morning stiffness lasting >30 mins",
-      "Radiating discomfort to glutes or thighs"
-    ],
-    redFlags: [
-      "Loss of bladder/bowel control (Cauda Equina)",
-      "Progressive leg weakness",
-      "Night pain that prevents sleep",
-      "History of cancer with new back pain"
-    ],
-    approach: "We utilize a hybrid model of Manual Therapy to reduce acute pain and Functional Movement Screening to correct the root postural imbalance.",
+    symptoms: ["Persistent dull ache in lumbar region", "Sharp stabbing pain during movement", "Morning stiffness lasting >30 mins", "Radiating discomfort to glutes"],
+    causes: ["Poor posture & desk ergonomics", "Muscle strain or ligament sprain", "Disc degeneration", "Sedentary lifestyle"],
+    redFlags: ["Loss of bladder/bowel control", "Progressive leg weakness", "Night pain preventing sleep", "History of cancer with new pain"],
+    approach: "We utilize a hybrid model of Manual Therapy to reduce acute pain and Functional Movement Screening to correct root postural imbalance.",
     treatments: [
       { name: "McKenzie Method (MDT)", desc: "Centralizing radiating pain through specific movements." },
       { name: "Core Stabilization", desc: "Deep abdominal strengthening to support the spine." },
-      { name: "Neural Mobilization", desc: "Gliding exercises for irritated nerves." },
+      { name: "Manual Therapy", desc: "Hands-on mobilization to relieve joint stiffness." },
       { name: "Ergonomic Correction", desc: "Workstation setup to prevent recurrence." }
-    ]
+    ],
+    goals: "Eliminate pain triggers, restore full range of motion, and return to pain-free daily activities."
   },
+  "sciatica": {
+    title: "Sciatica & Radiating Pain",
+    subtitle: "Relieve Nerve Compression & Restore Function",
+    category: "Spine Health",
+    heroImage: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1920&q=80",
+    description: "Sciatica occurs when the sciatic nerve is compressed, causing pain that radiates from the lower back down the leg. Our therapy focuses on decompressing the nerve.",
+    symptoms: ["Shooting pain down one leg", "Numbness or tingling in foot/toes", "Weakness in affected leg", "Pain worsening with sitting"],
+    causes: ["Slipped disc (Herniation)", "Spinal stenosis", "Piriformis syndrome", "Bone spurs"],
+    redFlags: ["Sudden severe weakness in leg", "Loss of bowel/bladder control", "Numbness in groin area"],
+    approach: "Neural flossing techniques and specific directional preferences to move the disc material away from the nerve root.",
+    treatments: [
+      { name: "Neural Mobilization", desc: "Gliding exercises to free the trapped nerve." },
+      { name: "McKenzie Extension", desc: "Specific movements to centralize pain." },
+      { name: "Soft Tissue Release", desc: "Releasing tight piriformis and hamstrings." },
+      { name: "Postural Re-education", desc: "Correcting sitting and standing habits." }
+    ],
+    goals: "Reduce nerve irritation, improve leg strength, and prevent future flare-ups."
+  },
+  
+  // KNEE & LOWER LIMB
+  "knee-osteoarthritis": {
+    title: "Knee Osteoarthritis",
+    subtitle: "Manage Pain & Improve Joint Longevity",
+    category: "Joint Health",
+    heroImage: "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=1920&q=80",
+    description: "Osteoarthritis involves the wearing down of cartilage. While we can't regrow cartilage, we can significantly reduce pain and improve function through targeted rehab.",
+    symptoms: ["Grinding sensation (Crepitus)", "Stiffness after rest", "Swelling after activity", "Difficulty climbing stairs"],
+    causes: ["Age-related wear and tear", "Previous injuries", "Obesity", "Muscle weakness"],
+    redFlags: ["Hot, red, swollen joint (Infection)", "Inability to bear weight", "Severe night pain"],
+    approach: "Unloading the joint through muscle strengthening and improving gait mechanics to reduce stress on the knee.",
+    treatments: [
+      { name: "Quadriceps Strengthening", desc: "Building shock absorbers for the knee." },
+      { name: "Gait Training", desc: "Correcting walking patterns to reduce load." },
+      { name: "Manual Therapy", desc: "Improving patellar mobility and joint glide." },
+      { name: "Weight Management Advice", desc: "Lifestyle tips to reduce joint stress." }
+    ],
+    goals: "Walk longer distances without pain, climb stairs confidently, and delay surgical intervention."
+  },
+
+  // NEURO
+  "stroke-rehab": {
+    title: "Stroke Rehabilitation",
+    subtitle: "Regain Independence & Motor Control",
+    category: "Neurological Rehab",
+    heroImage: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1920&q=80",
+    description: "Post-stroke recovery is a journey of neuroplasticity. We help rewire the brain to regain movement, balance, and independence in daily tasks.",
+    symptoms: ["One-sided weakness (Hemiparesis)", "Balance issues", "Speech difficulties", "Coordination problems"],
+    causes: ["Ischemic stroke", "Hemorrhagic stroke", "TIA (Mini-stroke)"],
+    redFlags: ["Sudden return of symptoms", "Severe headache", "Seizures", "High blood pressure spikes"],
+    approach: "Task-specific training and repetitive practice to encourage neuroplasticity and functional recovery.",
+    treatments: [
+      { name: "Gait Training", desc: "Re-learning to walk safely with aids if needed." },
+      { name: "Constraint-Induced Therapy", desc: "Forcing use of the affected limb." },
+      { name: "Balance & Coordination", desc: "Preventing falls and improving stability." },
+      { name: "ADL Training", desc: "Practice with dressing, eating, and hygiene." }
+    ],
+    goals: "Maximize independence in daily living, improve walking speed, and prevent falls."
+  },
+
+  // DEFAULT FALLBACK FOR ANY OTHER SLUG
   "default": {
     title: "Specialized Rehabilitation",
     subtitle: "Evidence-Based Recovery Protocols",
     category: "General Care",
     heroImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1920&q=80",
-    stats: [
-      { label: "Expertise", value: "10+ Yrs" },
-      { label: "Care Type", value: "Personalized" },
-      { label: "Technology", value: "Advanced" }
-    ],
     description: "Our comprehensive rehabilitation programs are designed to restore function, reduce pain, and improve your quality of life through scientifically proven methods.",
     symptoms: ["Chronic Pain", "Limited Range of Motion", "Muscle Weakness", "Post-Surgical Stiffness"],
+    causes: ["Acute Injury", "Chronic Overuse", "Post-surgical Status", "Age-related Changes"],
     redFlags: ["Severe Swelling", "Unexplained Fever", "Sudden Loss of Function"],
     approach: "A holistic assessment covering physical, functional, and lifestyle factors to create a bespoke recovery roadmap.",
     treatments: [
@@ -67,13 +111,16 @@ const conditionData = {
       { name: "Therapeutic Exercise", desc: "Targeted strengthening and flexibility routines." },
       { name: "Modalities", desc: "Ultrasound, TENS, and Laser therapy for pain management." },
       { name: "Patient Education", desc: "Empowering you with knowledge about your condition." }
-    ]
+    ],
+    goals: "Restore optimal function, prevent recurrence, and achieve measurable functional outcomes."
   }
 };
 
 export default function ConditionPage() {
   const params = useParams();
   const slug = params.slug;
+  
+  // Smart Lookup: Checks for exact match, otherwise uses default
   const data = conditionData[slug] || conditionData["default"];
   
   const pageRef = useRef(null);
@@ -123,12 +170,10 @@ export default function ConditionPage() {
       
       {/* --- HERO SECTION --- */}
       <div className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Image with Parallax Feel */}
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center transform scale-110"
           style={{ backgroundImage: `url(${data.heroImage})` }}
         />
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1e3f] via-[#0a1e3f]/80 to-transparent z-10" />
         
         <div className="relative z-20 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-20">
@@ -158,12 +203,18 @@ export default function ConditionPage() {
 
           {/* Floating Stats Cards */}
           <div className="hidden lg:grid grid-cols-2 gap-4">
-            {data.stats.map((stat, i) => (
-              <div key={i} className={`stat-card bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl ${i === 0 ? 'col-span-2' : ''}`}>
-                <div className="text-3xl font-bold text-[#c5973e] mb-1">{stat.value}</div>
-                <div className="text-sm text-blue-100 font-medium uppercase tracking-wide">{stat.label}</div>
-              </div>
-            ))}
+            <div className="stat-card bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl col-span-2">
+              <div className="text-3xl font-bold text-[#c5973e] mb-1">Expert Care</div>
+              <div className="text-sm text-blue-100 font-medium uppercase tracking-wide">Personalized for You</div>
+            </div>
+            <div className="stat-card bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
+              <div className="text-3xl font-bold text-[#c5973e] mb-1">10+ Years</div>
+              <div className="text-sm text-blue-100 font-medium uppercase tracking-wide">Experience</div>
+            </div>
+            <div className="stat-card bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl">
+              <div className="text-3xl font-bold text-[#c5973e] mb-1">5000+</div>
+              <div className="text-sm text-blue-100 font-medium uppercase tracking-wide">Patients Helped</div>
+            </div>
           </div>
         </div>
       </div>
@@ -192,10 +243,22 @@ export default function ConditionPage() {
                 ))}
               </div>
             </div>
+
+            {/* Causes Section */}
+            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+               <h3 className="text-xl font-bold text-[#0a1e3f] mb-4 flex items-center gap-3">
+                <BrainCircuit className="text-[#0071bd]" /> Possible Causes
+              </h3>
+              <ul className="list-disc list-inside text-slate-600 space-y-2 ml-2">
+                {data.causes.map((cause, i) => (
+                  <li key={i}>{cause}</li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="lg:col-span-5">
-            <div className="bg-[#0a1e3f] p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden">
+            <div className="bg-[#0a1e3f] p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden h-full">
               <div className="absolute top-0 right-0 w-40 h-40 bg-[#0071bd] rounded-full blur-[60px] opacity-20 -mr-10 -mt-10"></div>
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-[#c5973e]">
                 <AlertTriangle /> Red Flags
@@ -234,6 +297,17 @@ export default function ConditionPage() {
           </div>
         </div>
 
+        {/* GOALS SECTION */}
+        <div className="section-reveal bg-gradient-to-r from-[#c5973e] to-[#e8c678] rounded-3xl p-12 text-white shadow-lg mb-24 flex flex-col md:flex-row items-center gap-8">
+           <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center shrink-0">
+              <Target size={40} className="text-white" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold mb-2 text-[#0a1e3f]">Expected Rehabilitation Goals</h3>
+              <p className="text-[#0a1e3f]/90 font-medium text-lg">{data.goals}</p>
+            </div>
+        </div>
+
         {/* CTA SECTION */}
         <div className="section-reveal relative bg-[#0071bd] rounded-[3rem] p-12 md:p-20 overflow-hidden text-center">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
@@ -251,6 +325,13 @@ export default function ConditionPage() {
               </a>
             </div>
           </div>
+        </div>
+
+        {/* DISCLAIMER */}
+        <div className="mt-12 border-t border-slate-200 pt-8 text-center">
+          <p className="text-xs text-slate-400 max-w-4xl mx-auto leading-relaxed">
+            <strong>Medical Disclaimer:</strong> The content on this page is for educational purposes only and does not constitute medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read on this website.
+          </p>
         </div>
 
       </div>
