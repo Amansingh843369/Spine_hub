@@ -113,7 +113,7 @@ export default function AboutPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
           style={{ 
-            backgroundImage: `url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1920')` 
+            backgroundImage: `url('/office.jpeg')` 
           }}
         />
 
