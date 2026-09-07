@@ -41,7 +41,7 @@ export default function HomePage() {
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
-    { name: 'Blog', href: '/blog' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Contact Us', href: '/contact' }
   ];
 
