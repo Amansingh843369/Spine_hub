@@ -3,33 +3,68 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  Phone, MessageCircle, Menu, X, ArrowRight, ShieldCheck, 
-  Activity, MapPin, Star, Users, Zap, CheckCircle2, ChevronDown
+import { Fraunces, Manrope } from "next/font/google";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import {
+  Phone, MessageCircle, Menu, X, MapPin, ChevronDown, ChevronDown as ScrollChevron
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CarePathways from './CarePathways';
 import WhyChooseus from './WhyChooseus';
 import Footer from './Footer';
-import ConditionDropdown from './ConditionDropdown'; 
+import ConditionDropdown from './ConditionDropdown';
 
-// Register GSAP Plugin safely
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+ 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+});
+
+// Simple count-up, triggered once when it scrolls into view.
+function Counter({ value, suffix = "", duration = 1.6 }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [display, setDisplay] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (shouldReduceMotion) {
+      setDisplay(value);
+      return;
+    }
+    const startTime = performance.now();
+    let frame;
+    const tick = (now) => {
+      const progress = Math.min((now - startTime) / (duration * 1000), 1);
+      setDisplay(Math.floor(progress * value));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView, value, duration, shouldReduceMotion]);
+
+  return <span ref={ref}>{display}{suffix}</span>;
 }
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false); 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
-  
-  // Refs
-  const heroRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
-  // Navigation Items
+  const dropdownRef = useRef(null);
+  const photoRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
@@ -38,165 +73,166 @@ export default function HomePage() {
     { name: 'Contact Us', href: '/contact' }
   ];
 
+  const trustItems = [
+    "Experienced clinical leadership",
+    "Personalized programmes",
+    "Advanced rehabilitation technology",
+    "Close to Borivali Station",
+  ];
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    
-    // Initial check & event listener
+    const handleScroll = () => setIsScrolled(window.scrollY > 40);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // GSAP Animations
-    let ctx = gsap.context(() => {
-      gsap.from(".hero-content > *", {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-        delay: 0.2
-      });
-    }, heroRef);
-
-    // Close dropdown when clicking outside
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
-      ctx.revert(); // Cleanup GSAP
     };
   }, []);
 
-  // Prevent scrolling when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
   }, [mobileMenuOpen]);
 
+  const handlePhotoMove = (e) => {
+    if (shouldReduceMotion) return;
+    const rect = photoRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -6, y: px * 8 });
+  };
+  const resetTilt = () => setTilt({ x: 0, y: 0 });
+
+  const scrollToNext = () => {
+    document.getElementById('explore')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: shouldReduceMotion ? 0 : 0.13, delayChildren: 0.15 }
+    }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 26 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+  };
+
   return (
-    <div className="relative min-h-screen font-sans selection:bg-[#c5973e] selection:text-white bg-slate-50">
-      
-      {/* 1. STICKY NAVIGATION BAR */}
-      <nav 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
+    <div
+      className={`${fraunces.variable} ${manrope.variable} relative min-h-screen bg-white selection:bg-[#D6C299]/30 selection:text-[#0A0F1F]`}
+      style={{ fontFamily: 'var(--font-body)' }}
+    >
+      {/* Smooth scrolling site-wide, respecting reduced-motion preference */}
+      <style jsx global>{`
+        html { scroll-behavior: smooth; }
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto; }
+        }
+      `}</style>
+
+      {/* 1. STICKY NAVIGATION BAR — midnight navy, always on-brand */}
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
           isScrolled || mobileMenuOpen
-            ? "bg-white/95 backdrop-blur-md shadow-md border-slate-200 py-3" 
-            : "bg-transparent py-5 border-transparent"
+            ? "bg-[#0A0F1F]/95 backdrop-blur-sm shadow-lg shadow-[#0A0F1F]/10 py-3"
+            : "bg-transparent py-5 md:py-6"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
-          
-          <Link href="/" className="flex items-center gap-3 md:gap-4 group cursor-pointer z-50">
-            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-[#0a1e3f] text-white rounded-xl shadow-md transition-transform group-hover:scale-105">
-              <Activity size={24} className="text-[#c5973e] w-5 h-5 md:w-6 md:h-6" />
-            </div>
-            <div className="flex flex-col">
-              <span className={`text-lg md:text-2xl font-extrabold tracking-tight leading-none transition-colors ${
-                isScrolled || mobileMenuOpen ? "text-[#0a1e3f]" : "text-white"
-              }`}>
-                ADITYA
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
+
+          <Link href="/" className="flex items-center gap-3 z-50 shrink-0">
+            <div className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-[#D6C299] rounded-md shrink-0">
+              <span className="text-[#0A0F1F] text-xl italic" style={{ fontFamily: 'var(--font-display)' }}>
+                A
               </span>
-              <span className={`text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors ${
-                isScrolled || mobileMenuOpen ? "text-[#0071bd]" : "text-[#c5973e]"
-              }`}>
-                Spine & Joint Rehab
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-[16px] sm:text-lg font-medium tracking-tight text-white" style={{ fontFamily: 'var(--font-display)' }}>
+                Aditya Spine &amp; Joint
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-medium text-[#D6C299]">
+                Rehabilitation Clinic
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center gap-7 xl:gap-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <Link 
-                  key={item.name} 
-                  href={item.href} 
-                  className={`text-sm font-bold tracking-wide transition-colors relative py-2 group ${
-                    isScrolled 
-                      ? (isActive ? "text-[#0071bd]" : "text-slate-700 hover:text-[#0071bd]")
-                      : (isActive ? "text-[#c5973e]" : "text-white/90 hover:text-[#c5973e]")
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-[15px] font-medium relative py-1 transition-colors ${
+                    isActive ? "text-white" : "text-white/75 hover:text-white"
                   }`}
                 >
                   {item.name}
-                  <span className={`absolute bottom-0 left-0 h-[2px] transition-all duration-300 ${
-                    isScrolled ? "bg-[#0071bd]" : "bg-[#c5973e]"
-                  } ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}></span>
+                  {isActive && <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#D6C299]" />}
                 </Link>
               );
             })}
 
-            {/* CONDITIONS DROPDOWN TRIGGER */}
             <div ref={dropdownRef} className="relative">
-              <button 
+              <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className={`flex items-center gap-1 text-sm font-bold tracking-wide transition-colors relative py-2 group ${
-                  isScrolled 
-                    ? (dropdownOpen ? "text-[#0071bd]" : "text-slate-700 hover:text-[#0071bd]")
-                    : (dropdownOpen ? "text-[#c5973e]" : "text-white/90 hover:text-[#c5973e]")
+                className={`flex items-center gap-1.5 text-[15px] font-medium py-1 transition-colors ${
+                  dropdownOpen ? "text-white" : "text-white/75 hover:text-white"
                 }`}
               >
-                Conditions We Treat
-                <ChevronDown size={16} className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
-                <span className={`absolute bottom-0 left-0 h-[2px] transition-all duration-300 bg-[#c5973e] ${dropdownOpen ? "w-full" : "w-0 group-hover:w-full"}`}></span>
+                Conditions we treat
+                <ChevronDown size={15} className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
               </button>
-
-              {/* DROPDOWN COMPONENT */}
-              <div className={`absolute top-full left-0 pt-4 w-max transition-all duration-300 origin-top-left ${dropdownOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}> 
-                 <ConditionDropdown />
+              <div className={`absolute top-full left-0 pt-4 w-max transition-all duration-300 origin-top-left ${dropdownOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
+                <ConditionDropdown />
               </div>
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-4">
-            <a href="tel:7447755533" className={`flex items-center gap-2 px-5 py-2.5 rounded-full border-2 transition-all font-bold text-sm ${
-              isScrolled 
-                ? "border-[#0071bd] text-[#0071bd] hover:bg-[#0071bd] hover:text-white" 
-                : "border-white/30 text-white hover:bg-white hover:text-[#0a1e3f]"
-            }`}>
-              <Phone size={16} className={isScrolled ? "" : "text-[#c5973e]"} />
+          <div className="hidden lg:flex items-center">
+            <a
+              href="tel:7447755533"
+              className="flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full bg-[#D6C299] hover:bg-[#B89F72] text-[#0A0F1F] font-semibold text-sm transition-colors"
+            >
+              <Phone size={15} />
               +91 74477 55533
             </a>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
-          <button 
-            className={`lg:hidden p-2 rounded-lg transition-colors z-50 ${
-              isScrolled || mobileMenuOpen ? "text-[#0a1e3f]" : "text-white"
-            }`}
+          <button
+            className="lg:hidden p-2 rounded-md text-white z-50"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
 
         {/* Mobile Menu Overlay */}
-        <div 
-          className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-2xl transition-all duration-300 ease-in-out border-t border-slate-100 overflow-y-auto ${
-            mobileMenuOpen ? "max-h-[calc(100vh-80px)] opacity-100 visible" : "max-h-0 opacity-0 invisible"
+        <div
+          className={`lg:hidden absolute top-full left-0 w-full bg-[#0A0F1F] border-t border-white/10 transition-all duration-300 ease-in-out overflow-y-auto ${
+            mobileMenuOpen ? "max-h-[calc(100vh-72px)] opacity-100 visible" : "max-h-0 opacity-0 invisible"
           }`}
         >
-          <div className="flex flex-col px-6 py-8 space-y-2">
+          <div className="flex flex-col px-6 py-8 space-y-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <Link 
-                  key={item.name} 
+                <Link
+                  key={item.name}
                   href={item.href}
-                  className={`font-semibold text-lg py-3 border-b border-slate-100 transition-colors ${
-                    isActive ? "text-[#0071bd]" : "text-slate-700 hover:text-[#0071bd]"
+                  className={`font-medium text-lg py-3 border-b border-white/10 transition-colors ${
+                    isActive ? "text-[#D6C299]" : "text-white"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -204,20 +240,19 @@ export default function HomePage() {
                 </Link>
               );
             })}
-            <Link 
+            <Link
               href="/conditions"
-              className="font-semibold text-lg py-3 border-b border-slate-100 text-slate-700 hover:text-[#0071bd]"
+              className="font-medium text-lg py-3 border-b border-white/10 text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Conditions We Treat
+              Conditions we treat
             </Link>
-            
             <div className="pt-6">
-              <a 
-                href="tel:7447755533" 
-                className="w-full flex items-center justify-center gap-2 bg-[#0a1e3f] text-white py-4 rounded-xl font-bold"
+              <a
+                href="tel:7447755533"
+                className="w-full flex items-center justify-center gap-2 bg-[#D6C299] text-[#0A0F1F] py-4 rounded-full font-semibold"
               >
-                <Phone size={20} className="text-[#c5973e]" />
+                <Phone size={18} />
                 Call +91 74477 55533
               </a>
             </div>
@@ -225,68 +260,155 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTION */}
-      <section ref={heroRef} className="relative w-full h-screen min-h-[600px] md:min-h-[750px] flex items-center justify-center pt-20 overflow-hidden">
-        {/* Replaced generic image with high-quality physiotherapy clinic visual */}
-        <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transform scale-105"
-          style={{ 
-            backgroundImage: "url('https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQu1DY6SBdmDHzD3kNi91SIzyq6uz5nvlcl-GTgMkTt0eOG2SvbqKFMqEBwLA5t7Y1GrRYQTnkjAF7HQXQ')"
-          }}
-        ></div>
-        
-        {/* Improved Overlay Gradient for better text readability */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-br from-[#0a1e3f]/95 via-[#0a1e3f]/80 to-[#0071bd]/60"></div>
+      {/* 2. HERO — the section that carries the most visual weight on the page */}
+      <section className="relative w-full min-h-screen flex items-center overflow-hidden bg-[#0A0F1F] pt-28 pb-20 md:pt-32">
+        {/* Layered midnight-navy gradient, not a flat fill */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(circle at 15% 20%, #17203D 0%, #0A0F1F 45%, #05070F 100%)" }}
+        />
+        {/* Faint alignment-line texture, echoing spinal alignment rather than decorating for its own sake */}
+        <div
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{ backgroundImage: 'repeating-linear-gradient(180deg, transparent, transparent 39px, #ffffff 39px, #ffffff 40px)' }}
+        />
 
-        <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center hero-content w-full">
-          
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 md:mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#c5973e] animate-ping"></span>
-            <span className="text-white text-[10px] md:text-xs font-bold tracking-widest uppercase ml-1 md:ml-2">
-              Premium Healthcare Facility
-            </span>
-          </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-16 items-center w-full">
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6 md:mb-8 drop-shadow-xl">
-            Advanced Spine, Joint & <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c5973e] to-[#fce3a3]">
-              Neuro Rehabilitation
-            </span>
-          </h1>
+          {/* Left: copy, staggered in as one orchestrated sequence */}
+          <motion.div variants={containerVariants} initial="hidden" animate="show">
+            <motion.div variants={itemVariants} className="flex items-center gap-3 mb-7">
+              <span className="w-8 h-[1.5px] bg-[#D6C299]" />
+              <p className="flex items-center gap-1.5 text-[#D6D2C4] text-sm font-medium">
+                <MapPin size={14} className="text-[#D6C299]" />
+                Borivali West, Mumbai
+              </p>
+            </motion.div>
 
-          <div className="flex items-center gap-3 md:gap-6 w-full justify-center mb-6 md:mb-8 opacity-90">
-            <div className="h-[1px] w-12 sm:w-16 md:w-32 bg-gradient-to-r from-transparent to-[#c5973e]"></div>
-            <p className="flex items-center gap-1.5 md:gap-2 text-white tracking-widest text-xs md:text-base font-bold uppercase whitespace-nowrap">
-              <MapPin size={16} className="text-[#c5973e]" />
-              Borivali West, Mumbai
-            </p>
-            <div className="h-[1px] w-12 sm:w-16 md:w-32 bg-gradient-to-l from-transparent to-[#c5973e]"></div>
-          </div>
-
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-50 max-w-4xl mx-auto mb-10 md:mb-12 leading-relaxed drop-shadow-md font-light px-4">
-            Move better, reduce pain and rebuild confidence with a <strong className="font-semibold text-white">structured rehabilitation programme</strong> designed around your diagnosis.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 w-full sm:w-auto">
-            <button className="group w-full sm:w-auto px-8 py-4 bg-[#0071bd] hover:bg-[#085a91] text-white text-base md:text-lg font-bold rounded-xl shadow-lg shadow-[#0071bd]/30 transition-all duration-300 flex items-center justify-center gap-3 transform hover:-translate-y-1">
-              Book an Assessment
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <a 
-              href="https://wa.me/917447755533"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-[#c5973e]/20 border-2 border-[#c5973e] text-white text-base md:text-lg font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
+            <motion.h1
+              variants={itemVariants}
+              className="text-[2.1rem] leading-[1.18] sm:text-[2.75rem] lg:text-[3.15rem] lg:leading-[1.15] text-white mb-6"
+              style={{ fontFamily: 'var(--font-display)' }}
             >
-              <MessageCircle size={20} className="text-[#c5973e]" />
-              WhatsApp Us
-            </a>
-          </div>
+              Advanced Spine, Joint &amp;{" "}
+              <span className="italic text-[#D6C299]">Neuro Rehabilitation</span>{" "}
+              in Borivali West
+            </motion.h1>
+
+            <motion.p variants={itemVariants} className="text-[#C7C2B0] text-base md:text-[17px] max-w-lg mb-9 leading-relaxed">
+              Move better, reduce pain and rebuild confidence with a structured
+              rehabilitation programme designed around your diagnosis, movement
+              limitations and personal goals.
+            </motion.p>
+
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-start gap-4 mb-10">
+              <button className="px-7 py-3.5 bg-[#D6C299] hover:bg-[#B89F72] text-[#0A0F1F] font-semibold rounded-full transition-colors">
+                Book an Assessment
+              </button>
+
+              <div>
+                <div className="flex rounded-full border border-white/25 overflow-hidden">
+                  <a
+                    href="tel:7447755533"
+                    className="flex items-center gap-2 pl-6 pr-5 py-3.5 text-white font-medium hover:bg-white/10 transition-colors border-r border-white/25"
+                  >
+                    <Phone size={16} />
+                    Call
+                  </a>
+                  <a
+                    href="https://wa.me/917447755533"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 pl-5 pr-6 py-3.5 text-white font-medium hover:bg-white/10 transition-colors"
+                  >
+                    <MessageCircle size={16} />
+                    WhatsApp
+                  </a>
+                </div>
+                <p className="text-[#8C8775] text-xs mt-2 text-center">7447755533</p>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-2 max-w-lg">
+              {trustItems.map((item, i) => (
+                <span key={item} className="flex items-center gap-3 text-[#C4BFAF] text-[13px] sm:text-sm">
+                  {i > 0 && <span className="text-[#D6C299]" aria-hidden="true">•</span>}
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right: framed photo with gold orbit ring + a floating stat card */}
+          <motion.div
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
+            className="relative hidden sm:block"
+          >
+            {/* Decorative rotating gold ring — motion tied to the "movement" theme */}
+            <motion.svg
+              viewBox="0 0 400 400"
+              className="absolute -top-10 -right-10 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-40 pointer-events-none -z-0"
+              animate={shouldReduceMotion ? {} : { rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 60, ease: "linear" }}
+            >
+              <circle cx="200" cy="200" r="180" fill="none" stroke="#D6C299" strokeWidth="1.5" strokeDasharray="2 14" strokeLinecap="round" />
+            </motion.svg>
+
+            <div
+              ref={photoRef}
+              onMouseMove={handlePhotoMove}
+              onMouseLeave={resetTilt}
+              style={{ perspective: 1000 }}
+              className="relative z-10 max-w-md mx-auto lg:mx-0 lg:ml-auto"
+            >
+              <motion.div
+                animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+                transition={{ type: "spring", stiffness: 150, damping: 15 }}
+                className="relative aspect-[4/5] rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40"
+              >
+                {/* Replace with a real, licensed photo of your clinic/team */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: "url('/images/hero-clinic.jpg')" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1F]/60 via-transparent to-transparent" />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.6 }}
+                className="absolute -bottom-7 left-4 lg:-left-8 bg-white rounded-xl px-6 py-5 max-w-[210px] border border-[#D6C299]/30 shadow-[0_25px_50px_-20px_rgba(0,0,0,0.35)] z-20"
+              >
+                <p className="text-3xl text-[#0A0F1F]" style={{ fontFamily: 'var(--font-display)' }}>
+                  100<span className="text-[#D6C299]">%</span>
+                </p>
+                <p className="text-[#6b6558] text-[13px] mt-1 leading-snug">
+                  diagnosis-led, individually planned care
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Scroll cue — clicking (or reaching) smooth-scrolls into the next section */}
+        <motion.button
+          onClick={scrollToNext}
+          aria-label="Scroll to explore"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors"
+          animate={shouldReduceMotion ? {} : { y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+        >
+          <ScrollChevron size={26} />
+        </motion.button>
       </section>
 
       {/* Placeholders for the rest of your components */}
-      <CarePathways />
+      <div id="explore">
+        <CarePathways />
+      </div>
       <WhyChooseus />
       <Footer />
     </div>
