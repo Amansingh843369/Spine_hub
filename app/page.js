@@ -274,7 +274,7 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-start gap-4 mb-10">
-              <button className="px-7 py-3.5 bg-[#e8a318] hover:bg-[#ffa600] text-[#ffffff] font-semibold rounded-full transition-colors shadow-lg shadow-[#D6C299]/20">
+              <button className="px-7 py-3.5 bg-[#f5a70b] hover:bg-[#ffa600] text-[#ffffff] font-semibold rounded-full transition-colors shadow-lg shadow-[#D6C299]/20">
                 Book an Assessment
               </button>
 
