@@ -13,11 +13,7 @@ const galleryData = [
   { id: 4, src: '/4.jpeg', alt: 'Modern Clinic Facility', category: 'facility' },
   { id: 5, src: '/5.jpeg', alt: 'Personalized Patient Care', category: 'treatment' },
   { id: 6, src: '/6.jpeg', alt: 'Advanced Equipment', category: 'facility' },
-  { id: 7, src: '/7.jpeg', alt: 'Expert Consultation', category: 'treatment' },
-  { id: 8, src: '/8.jpeg', alt: 'Recovery Progress', category: 'therapy' },
-  { id: 9, src: '/9.jpeg', alt: 'Recovery Progress', category: 'therapy' },
-  { id: 10, src: '/10.jpeg', alt: 'Recovery Progress', category: 'therapy' },
-  { id: 11, src: '/11.jpeg', alt: 'Recovery Progress', category: 'therapy' },
+ 
   { id: 12, src: '/12.jpeg', alt: 'Recovery Progress', category: 'therapy' },
   { id: 13, src: '/13.jpeg', alt: 'Recovery Progress', category: 'therapy' },
   { id: 14, src: '/14.jpeg', alt: 'Recovery Progress', category: 'therapy' },
