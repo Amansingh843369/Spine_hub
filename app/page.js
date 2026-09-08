@@ -263,7 +263,7 @@ export default function HomePage() {
               style={{ fontFamily: 'var(--font-display)' }}
             >
               Advanced Spine, Joint &amp;{" "}
-              <span className="italic text-[#cc8900]">Neuro Rehabilitation</span>{" "}
+              <span className="bold text-[#D3AF37]">Neuro Rehabilitation</span>{" "}
               in Borivali West
             </motion.h1>
 
