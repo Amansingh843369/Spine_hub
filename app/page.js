@@ -231,7 +231,7 @@ export default function HomePage() {
       {/* 2. HERO SECTION - Deep Blue & Gold Theme */}
       <section className="relative w-full min-h-screen flex items-center overflow-hidden bg-[#00309f] pt-28 pb-20 md:pt-32">
         
-        {/* Background Gradient */}
+        {/* Background Gradient #01309c */}
         <div
           className="absolute inset-0"
           style={{
@@ -263,7 +263,7 @@ export default function HomePage() {
               style={{ fontFamily: 'var(--font-display)' }}
             >
               Advanced Spine, Joint &amp;{" "}
-              <span className="italic text-[#D6C299]">Neuro Rehabilitation</span>{" "}
+              <span className="italic text-[#cc8900]">Neuro Rehabilitation</span>{" "}
               in Borivali West
             </motion.h1>
 
