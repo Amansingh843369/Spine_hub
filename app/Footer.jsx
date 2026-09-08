@@ -21,9 +21,6 @@ export default function MedicalFooter() {
   const socialIcons = [
     { Icon: FaFacebookF, label: 'Facebook', href: 'https://www.facebook.com/share/1EnqBWDVMq/' },
     { Icon: FaInstagram, label: 'Instagram', href: 'https://www.instagram.com/adityaspinerehab/' },
-    { Icon: FaYoutube, label: 'YouTube', href: '#' },
-    { Icon: FaLinkedinIn, label: 'LinkedIn', href: '#' },
-    { Icon: FaWhatsapp, label: 'WhatsApp', href: '#' },
   ];
 
   const specialties = [
@@ -40,7 +37,7 @@ export default function MedicalFooter() {
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
     { name: 'Services & Therapies', href: '/services' },
-    { name: 'Meet Doctor', href: '#' },
+    { name: 'Meet Doctor', href: '/profile' },
     { name: 'Patient Testimonials', href: '/testimonials' },
     { name: 'Book Appointment', href: '#' },
     { name: 'Contact Us', href: '/contact' },

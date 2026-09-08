@@ -374,7 +374,7 @@ export default function HomePage() {
         <CarePathways />
       </div>
       <WhyChooseus />
-      <Footer />
+     
     </div>
   );
 }
