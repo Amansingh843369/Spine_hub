@@ -274,7 +274,7 @@ export default function HomePage() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-start gap-4 mb-10">
-              <button className="px-7 py-3.5 bg-[#D6C299] hover:bg-[#B89F72] text-[#004899] font-semibold rounded-full transition-colors shadow-lg shadow-[#D6C299]/20">
+              <button className="px-7 py-3.5 bg-[#e8a318] hover:bg-[#ffa600] text-[#ffffff] font-semibold rounded-full transition-colors shadow-lg shadow-[#D6C299]/20">
                 Book an Assessment
               </button>
 
@@ -297,14 +297,14 @@ export default function HomePage() {
                     WhatsApp
                   </a>
                 </div>
-                <p className="text-white/60 text-xs mt-2 text-center">7447755533</p>
+     
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-2 max-w-lg">
               {trustItems.map((item, i) => (
-                <span key={item} className="flex items-center gap-3 text-white/80 text-[13px] sm:text-sm">
-                  {i > 0 && <span className="text-[#D6C299]" aria-hidden="true">•</span>}
+                <span key={item} className="flex items-center gap-3 text-white text-[13px] sm:text-sm">
+                  {i >= 0 && <span className="text-[#e8a318]" aria-hidden="true">•</span>}
                   {item}
                 </span>
               ))}
