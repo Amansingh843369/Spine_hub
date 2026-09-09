@@ -2,12 +2,12 @@
   "name": "aditya-spine-rehab",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next npm install next@latest eslint-config-next@latestdev",
-    "build": "next build --webpack",
-    "start": "next start",
-    "lint": "eslint"
-  },
+ "scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+},
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^13.1.1",

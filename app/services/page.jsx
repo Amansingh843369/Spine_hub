@@ -42,7 +42,7 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-yellow-200 selection:text-blue-900">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-yellow-200 selection:text-blue-900">
       
       {/* Hero Section - Matching About Us Style */}
       <section className="relative h-[50vh] min-h-[400px] flex flex-col items-center justify-center overflow-hidden">
@@ -76,49 +76,60 @@ export default function ServicesPage() {
         {/* Curved Bottom Edge (White Wave) */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
           <svg className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-slate-50"></path>
           </svg>
         </div>
       </section>
 
       {/* Services Grid Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-20">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <div 
                 key={index}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-100 flex flex-col h-full transform hover:-translate-y-2"
+                className="group relative bg-white rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_50px_-12px_rgba(15,23,42,0.25)] transition-all duration-500 overflow-hidden border border-slate-100 flex flex-col h-full transform hover:-translate-y-2"
               >
-                {/* Card Image */}
-                <div className="relative h-56 overflow-hidden">
-                  <div className="absolute inset-0 bg-[#0f172a]/10 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                {/* Card Image Container */}
+                <div className="relative h-64 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500 z-10"></div>
                   <img 
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
-                  {/* Gold Accent Line */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                  
+                  {/* Floating Icon/Badge (Optional Modern Touch) */}
+                  <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
                 </div>
                 
                 {/* Card Content */}
-                <div className="p-8 flex-grow flex flex-col">
-                  <h3 className="text-2xl font-bold text-[#0f172a] mb-4 group-hover:text-blue-800 transition-colors duration-300">
+                <div className="p-8 flex-grow flex flex-col relative">
+                  {/* Gold Accent Line Top */}
+                  <div className="absolute top-0 left-8 w-12 h-1 bg-yellow-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+
+                  <h3 className="text-2xl font-bold text-[#0f172a] mb-4 group-hover:text-blue-900 transition-colors duration-300 mt-2">
                     {service.title}
                   </h3>
                   
-                  <p className="text-slate-600 leading-relaxed mb-8 flex-grow text-sm md:text-base">
+                  <p className="text-slate-500 leading-relaxed mb-8 flex-grow text-sm md:text-base line-clamp-4 group-hover:line-clamp-none transition-all duration-300">
                     {service.description}
                   </p>
                   
-                  <button className="w-full mt-auto bg-white text-[#0f172a] border-2 border-[#0f172a] py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#0f172a] hover:text-white hover:border-[#0f172a] transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg">
+                  <button className="w-full mt-auto bg-slate-50 text-[#0f172a] border border-slate-200 py-3.5 px-6 rounded-xl font-semibold text-sm uppercase tracking-wider hover:bg-[#0f172a] hover:text-white hover:border-[#0f172a] transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg">
                     Check Suitability
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </button>
                 </div>
+                
+                {/* Subtle Glow Effect on Hover */}
+                <div className="absolute inset-0 border-2 border-yellow-500/0 group-hover:border-yellow-500/20 rounded-3xl transition-colors duration-500 pointer-events-none"></div>
               </div>
             ))}
           </div>
@@ -128,6 +139,7 @@ export default function ServicesPage() {
       {/* Bottom CTA Strip */}
       <section className="bg-[#0f172a] py-20 px-4 relative overflow-hidden mt-10">
         <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

@@ -8,12 +8,10 @@ import {
   Phone,
   Mail,
   Globe,
-  Activity,
   ShieldCheck,
-  HeartPulse,
-  Award,
   ChevronRight,
   CalendarCheck,
+  ArrowRight,
 } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa';
 
@@ -24,13 +22,13 @@ export default function MedicalFooter() {
   ];
 
   const specialties = [
-    { name: 'Spine & Disc Care', badge: 'Popular' },
-    { name: 'Neck, Back & Sciatica Pain', badge: null },
-    { name: 'Joint & Sports Injury', badge: null },
-    { name: 'Chiropractic & Osteopathy', badge: 'Advanced' },
-    { name: 'Ozone (O₃) Therapy', badge: 'Special' },
-    { name: 'Regenerative Therapy', badge: null },
-    { name: 'Neurological Rehabilitation', badge: null },
+    { name: 'Spine & Disc Care' },
+    { name: 'Neck, Back & Sciatica Pain' },
+    { name: 'Joint & Sports Injury' },
+    { name: 'Chiropractic & Osteopathy' },
+    { name: 'Ozone (O₃) Therapy' },
+    { name: 'Regenerative Therapy' },
+    { name: 'Neurological Rehabilitation' },
   ];
 
   const quickLinks = [
@@ -39,7 +37,7 @@ export default function MedicalFooter() {
     { name: 'Services & Therapies', href: '/services' },
     { name: 'Meet Doctor', href: '/profile' },
     { name: 'Patient Testimonials', href: '/testimonials' },
-    { name: 'Book Appointment', href: '#' },
+    { name: 'Book Appointment', href: '/enquiry-form' },
     { name: 'Contact Us', href: '/contact' },
   ];
 
@@ -76,45 +74,59 @@ export default function MedicalFooter() {
         className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-8"
       >
         {/* Pre-Footer Banner styled in Classic Blue Gradient */}
+     
+        {/* --- 1. CTA BANNER (OUTSIDE FOOTER GRID) --- */}
         <motion.div 
-          variants={itemVariants}
-          className="relative mb-20 overflow-hidden rounded-3xl bg-gradient-to-r from-[#01018b]  p-8 md:p-12 shadow-2xl border border-white/15 flex flex-col lg:flex-row lg:items-center justify-between gap-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative mb-20 overflow-hidden rounded-3xl border border-blue-500/30 shadow-2xl shadow-blue-900/40"
         >
-          {/* Glass skew reflection */}
-          <div className="absolute right-0 top-0 h-full w-1/2 bg-[#00309f] to-transparent skew-x-28 translate-x-20 pointer-events-none" />
+          {/* Gradient Background for CTA */}
+       <div className="bg-[#142a62]" />
+          
+          {/* Decorative Glow inside CTA */}
+          
 
-          <div className="relative z-10 max-w-2xl space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md">
-              <ShieldCheck size={14} className="text-[#c5973e]" />
-              <span>Trusted Spine Care</span>
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 p-8 md:p-12 bg-[#142a62] ">
+            
+            <div className="max-w-2xl space-y-4 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-blue-400 backdrop-blur-md">
+                <ShieldCheck size={14} />
+                <span>Trusted Spine Care</span>
+              </div>
+              
+              <h3 className="text-3xl font-extrabold text-white sm:text-4xl leading-tight">
+                Ready to Live a <span className="text-transparent bg-clip-text bg-[#f5a70b]">Pain-Free Life?</span>
+              </h3>
+              
+              <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-lg mx-auto lg:mx-0">
+                Schedule your comprehensive spinal evaluation today. Advanced non-surgical treatments customized for your recovery journey.
+              </p>
             </div>
-            <h3 className="text-3xl font-extrabold text-white sm:text-4xl leading-tight">
-              Ready to Live a <span className="text-[#c5973e]">Pain-Free Life?</span>
-            </h3>
-            <p className="text-blue-100/90 text-sm md:text-base leading-relaxed">
-              Schedule your comprehensive spinal evaluation today. Advanced non-surgical treatments customized for your recovery journey.
-            </p>
-          </div>
 
-          <div className="relative z-10 flex flex-col sm:flex-row gap-4 shrink-0">
-            <motion.a
-              href="tel:+917447755533"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 border border-white/20 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/20 hover:border-white/30"
-            >
-              <Phone size={18} className="text-[#c5973e]" />
-              <span>Call Us</span>
-            </motion.a>
+            <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full lg:w-auto">
+              <motion.a
+                href="tel:+917447755533"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 rounded-xl bg-white/5 border border-white/10 px-6 py-4 text-sm font-bold text-white transition-all hover:bg-white/10 hover:border-white/20 group"
+              >
+                <Phone size={18} className="text-blue-400 group-hover:text-white transition-colors" />
+                <span>Call Now</span>
+              </motion.a>
 
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#c5973e] px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-[#c5973e]/20 transition-all hover:bg-[#b08432]"
-            >
-              <CalendarCheck size={18} />
-              Book Appointment
-            </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(59, 130, 246, 0.5)" }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-500"
+              >
+                <CalendarCheck size={18} />
+                Book Appointment
+                <ArrowRight size={16} className="opacity-70" />
+              </motion.button>
+            </div>
           </div>
         </motion.div>
 
@@ -128,21 +140,10 @@ export default function MedicalFooter() {
         
                 { <Image src="/aditya-logo.jpg" alt="Aditya Spine Logo" width={100} height={100} className=" w-auto  object-contain" /> }
 
-                
-                
-                {/* <div>
-                  <span className="block text-2xl font-black tracking-tight text-white leading-none">
-                    Aditya Spine & Joint 
- 
-                  </span>
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.22em] text-[#c5973e] mt-1">
-                    Rehabilitation Clinic
-                  </span>
-                </div> */}
               </div>
             </Link>
 
-            <p className="text-sm leading-relaxed text-blue-100/75 max-w-sm">
+            <p className="text-sm leading-relaxed text-white max-w-sm">
               Pioneering advanced, non-invasive spine and joint care through global treatment standards, precision osteopathy, and personalized rehabilitation protocols.
             </p>
 
@@ -154,7 +155,7 @@ export default function MedicalFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-blue-100/80 transition-all duration-300 hover:bg-[#0f4c81] hover:border-[#0f4c81] hover:text-white hover:scale-110 shadow-sm"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white transition-all duration-300 hover:bg-[#0f4c81] hover:border-[#0f4c81] hover:text-white hover:scale-110 shadow-sm"
                 >
                   <Icon size={16} />
                 </a>
@@ -171,9 +172,9 @@ export default function MedicalFooter() {
             <ul className="space-y-3">
               {specialties.map((item) => (
                 <li key={item.name}>
-                  <Link href="#" className="group flex items-center justify-between text-sm text-blue-100/75 transition-colors hover:text-white">
+                  <Link href="#" className="group flex items-center justify-between text-sm text-white transition-colors hover:text-white">
                     <span className="flex items-center gap-2">
-                      <ChevronRight size={14} className="text-white/30 transition-transform group-hover:translate-x-1 group-hover:text-[#c5973e]" />
+                      <ChevronRight size={14} className="text-white transition-transform group-hover:translate-x-1 group-hover:text-[#c5973e]" />
                       {item.name}
                     </span>
                     {item.badge && (
@@ -196,7 +197,7 @@ export default function MedicalFooter() {
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="group inline-flex items-center text-sm text-blue-100/75 transition-colors hover:text-white">
+                  <Link href={link.href} className="group inline-flex items-center text-sm text-white transition-colors hover:text-white">
                     <span className="relative">
                       {link.name}
                       <span className="absolute -bottom-0.5 left-0 h-[1.5px] w-0 bg-[#c5973e] transition-all duration-300 group-hover:w-full" />
@@ -255,13 +256,13 @@ export default function MedicalFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col items-center justify-between gap-4 text-xs text-blue-100/50 md:flex-row">
+        <div className="border-t border-white/10 pt-8 flex flex-col items-center justify-between gap-4 text-xs text-blue md:flex-row">
           <p className="text-center md:text-left">
             &copy; {new Date().getFullYear()} <span className="font-semibold text-white">Aditya Spine & Joint Rehab LLP</span>. All rights reserved.
           </p>
           <div className="flex items-center gap-6 font-medium">
-            <Link href="#" className="transition-colors hover:text-[#c5973e]">Privacy Policy</Link>
-            <Link href="#" className="transition-colors hover:text-[#c5973e]">Terms of Service</Link>
+            <Link href="#" className="transition-colors hover:text-[#d7d6d3]">Privacy Policy</Link>
+            <Link href="#" className="transition-colors hover:text-[#eae9e8]">Terms of Service</Link>
           </div>
         </div>
 
